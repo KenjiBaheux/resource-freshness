@@ -5,8 +5,8 @@ Proposal for a HTTP header field to be used in the context of stale-while-revali
 For context, please read [Mark Nottingham's blog post about stale-while-revalidate](https://www.mnot.net/blog/2007/12/12/stale).
 
 ##Description of the header##
-Resource-Freshness is a HTTP header that user agents would send on revalidation of assets that were served with max-age
-or stale-while-revalidate directives.
+Resource-Freshness is a HTTP header that user agents would send on revalidation of assets that were served with 
+the stale-while-revalidate Cache-Control directive.
 
 The purpose of this header is to help webmasters optimize the values of max-age and stale-while-revalidate for a given
 resource.
