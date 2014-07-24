@@ -1,0 +1,17 @@
+PERMANENT MESSAGE HEADER FIELD REGISTRATION TEMPLATE:
+
+   Header field name: Resource-Freshness
+
+   Applicable protocol: http
+
+   Status: experimental
+     
+   Author/Change controller: 
+    Kenji Baheux 
+    kenjibaheux@google.com
+    Google
+
+   Specification document(s):
+    https://github.com/KenjiBaheux/resource-freshness/blob/master/specification.txt
+
+   Related information: http://tools.ietf.org/html/rfc5861
