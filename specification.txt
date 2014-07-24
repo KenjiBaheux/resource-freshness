@@ -1,0 +1,157 @@
+HTTP Header for optimizing stale-while-revalidate
+
+Abstract
+
+   This document defines a HTTP header that allow webmasters to understand the
+   efficiency of stale-while-revalidate and to further optimize the max-age and
+   stale-while-revalidate values.
+
+Status of This Memo
+
+   This document is not an Internet Standards Track specification; it is
+   published for informational purposes.
+   
+
+1. Introduction
+
+   HTTP [RFC5861] introduces two independent HTTP Cache-Control extensions that
+   allow control over the use of stale responses by caches.
+   
+   In particular, stale-while-revalidate is a HTTP Cache-Control extension which
+   allows a cache to immediately return a stale response while it revalidates it
+   in the background, thereby hiding latency (both in the network and on
+   the server) from clients.
+   
+   Concretely, a response containing:
+   
+     Cache-Control: max-age=600, stale-while-revalidate=30
+     
+   would mean that the resource can be used for 600 seconds, and used for an
+   additional period of 30 seconds provided that the user agent attempts to
+   asynchronously revalidate the resource.
+  
+   Performance conscious webmasters will want to optimize max-age and
+   stale-while-revalidate in order to maximize the proportion of asynchronous
+   revalidations while minimizing revalidations overall as well as staying
+   within the limits of how long they can accomodate for stale assets.
+   
+   This proposal introduces a HTTP header sent by caches which provides
+   the information webmasters would need to fully take advantage of the
+   opportunity offered by stale-while-revalidate.
+   
+
+2. Notational Conventions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in RFC 2119 [RFC2119].
+
+   This specification uses the augmented Backus-Naur Form of RFC 2616
+   [RFC2616], and it includes the delta-seconds rule from that
+   specification.
+  
+3. The Resource-Freshness header
+
+   When a cache (e.g. a user agent, a proxy) wants to revalidate a resource that
+   was served with a stale-while-revalidate Cache-Control extension, it SHOULD
+   include a Resource-Freshness header to its revalidation request.
+
+     Resource-Freshness = "Resource-Freshness" ":" max-age "," 
+       stale-while-revalidate ","
+       age
+    
+    max-age = "max-age" "=" delta-seconds
+    
+    stale-while-revalidate = "stale-while-revalidate" "=" delta-seconds
+    
+    age = "age" "=" delta-seconds
+    
+    
+    where
+      1. max-age and stale-while-revalidate re-use the original values the
+         resource was served with.
+         
+      2. age is the age of the resource at the time the request was formed
+    
+
+3.1.  Examples
+3.1.1 Example with an asynchronous revalidation request
+
+   A resource is served with the stale-while-revalidate Cache-Control extension
+   as follows:
+
+     Cache-Control: max-age=600, stale-while-revalidate=30
+
+   620 seconds later, the resource is requested and served from the cache, an
+   asynchronous revalidation request is sent with the following header:
+   
+     Resource-Freshness: max-age=600, stale-while-revalidate=30, age=620
+     
+   The server would then know that the resource was originally served with a
+   max-age Cache-Control extension of 600 seconds and a stale-while-revalidate
+   Cache-control extension of 30 seconds. 
+   
+   The server would also be able to deduce that the request is an asynchronous
+   revalidation request given that max-age < age < max-age+stale-while-revalidate.
+   
+   
+3.1.2 Example with a synchronous revalidation request
+
+   A resource is served with the stale-while-revalidate Cache-Control extension
+   as follows:
+
+     Cache-Control: max-age=600, stale-while-revalidate=30
+
+   640 seconds later, the resource is requested. Given that the resouce is truly
+   stale (640 > 600 + 30), a synchronous revalidation request is sent with the
+   following header:
+   
+     Resource-Freshness: max-age=600, stale-while-revalidate=30, age=640
+     
+   The server would then know that the resource was originally served with a
+   max-age Cache-Control extension of 600 seconds and a stale-while-revalidate
+   Cache-control extension of 30 seconds. 
+   
+   The server would also be able to deduce that the request is a synchronous
+   revalidation request given that age > max-age+stale-while-revalidate.
+
+   
+4.  Security and Privacy Considerations
+
+   This section is non-normative.
+
+   The Resource-Freshness header could be combined with other functionality in
+   order to identify a user through fingerprinting. Specifically, max-age and
+   stale-while-revalidate could be set to peculiar values that may provide
+   additional entropy.
+   
+   Implementations may reduce the risk by not sending Resource-Freshness headers
+   to web origins for which cookies have been blocked.
+   
+
+
+5.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
+              Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
+              Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
+
+   [RFC5861]  Nottingham, M., "HTTP Cache-Control Extensions for Stale Content
+              ", BCP 14, RFC 2119, March 1997.
+
+
+Appendix A.  Acknowledgements
+
+   Thanks to Mark Nottingham for his suggestions.
+   
+
+Author's Address
+
+   Kenji Baheux
+   Google
+
+   EMail: kenjibaheux@google.com
+   URI:   http://plus.google.com/+kenjibaheux/
