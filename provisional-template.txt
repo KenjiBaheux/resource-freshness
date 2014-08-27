@@ -1,6 +1,6 @@
 PROVISIONAL MESSAGE HEADER FIELD SUBMISSION TEMPLATE:
 
-   Header field name: Resource-Freshness
+   Header field name: Freshness
 
    Applicable protocol: http
 

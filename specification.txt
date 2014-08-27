@@ -56,7 +56,7 @@ Status of This Memo
    was served with a stale-while-revalidate Cache-Control extension, it SHOULD
    include a Resource-Freshness header to its revalidation request.
 
-     Resource-Freshness = "Resource-Freshness" ":" max-age "," 
+     Resource-Freshness = "Freshness" ":" max-age "," 
        stale-while-revalidate ","
        age
     
@@ -106,7 +106,7 @@ Status of This Memo
    stale (640 > 600 + 30), a synchronous revalidation request is sent with the
    following header:
    
-     Resource-Freshness: max-age=600, stale-while-revalidate=30, age=640
+     Freshness: max-age=600, stale-while-revalidate=30, age=640
      
    The server would then know that the resource was originally served with a
    max-age Cache-Control extension of 600 seconds and a stale-while-revalidate
@@ -120,12 +120,12 @@ Status of This Memo
 
    This section is non-normative.
 
-   The Resource-Freshness header could be combined with other functionality in
+   The Freshness header could be combined with other functionality in
    order to identify a user through fingerprinting. Specifically, max-age and
    stale-while-revalidate could be set to peculiar values that may provide
    additional entropy.
    
-   Implementations may reduce the risk by not sending Resource-Freshness headers
+   Implementations may reduce the risk by not sending Freshness headers
    to web origins for which cookies have been blocked.
    
 
