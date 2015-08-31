@@ -1,24 +1,24 @@
-#Freshness#
+#Resource-Freshness#
 Proposal for a HTTP header field to be used in the context of stale-while-revalidate (RFC5861)
 
 ##Background##
 For context, please read [Mark Nottingham's blog post about stale-while-revalidate](https://www.mnot.net/blog/2007/12/12/stale).
 
 ##Description of the header##
-Freshness is a HTTP header that user agents would send on revalidation of assets that were served with 
+Resource-Freshness is a HTTP header that user agents would send on revalidation of assets that were served with 
 the stale-while-revalidate Cache-Control directive.
 
 The purpose of this header is to help webmasters optimize the values of max-age and stale-while-revalidate for a given
 resource.
 
-The Freshness header will report the original max-age value, the original stale-while-revalidate value as well
+The Resource-Freshness header will report the original max-age value, the original stale-while-revalidate value as well
 as the current age of the asset.
 
 Example: 
- * Freshness: max-age=86400, stale-while-revalidate=259200, age=103680
+ * Resource-Freshness: max-age=86400, stale-while-revalidate=259200, age=103680
 
-##How the header would be used##
-Based on the information carried by Freshness, webmasters would be able to know how often user agents had to resort to synchronous
+##Usage##
+Based on the information carried by Resource-Freshness, webmasters would be able to know how often user agents had to resort to synchronous
 revalidations and how bad the problem is. 
 
 For instance, revalidations could be categorized into asynchronous and synchronous by looking at the following instances:
