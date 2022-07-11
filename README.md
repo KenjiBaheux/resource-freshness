@@ -1,10 +1,13 @@
-#Resource-Freshness#
+# Resource-Freshness
+
 Proposal for a HTTP header field to be used in the context of stale-while-revalidate (RFC5861)
 
-##Background##
+## Background
+
 For context, please read [Mark Nottingham's blog post about stale-while-revalidate](https://www.mnot.net/blog/2007/12/12/stale).
 
-##Description of the header##
+## Description of the header
+
 Resource-Freshness is a HTTP header that user agents would send on revalidation of assets that were served with 
 the stale-while-revalidate Cache-Control directive.
 
@@ -17,7 +20,8 @@ as the current age of the asset.
 Example: 
  * Resource-Freshness: max-age=86400, stale-while-revalidate=259200, age=103680
 
-##Usage##
+## Usage
+
 Based on the information carried by Resource-Freshness, webmasters would be able to know how often user agents had to resort to synchronous
 revalidations and how bad the problem is. 
 
@@ -30,7 +34,7 @@ For instance, revalidations could be categorized into asynchronous and synchrono
 
 Assessing how bad the problem is can be done by looking at the overall efficiency:
 
- *  # of asynchronous revalidation / (# of synchronous revalidations + # of asynchronous revalidations)
+ *  Number of asynchronous revalidations / (Number of synchronous revalidations + Number of asynchronous revalidations)
 
 Histograms can be used to understand the impact of Understanding the impact of tweaking max-age and/or stale-while-revalidate.
 
